@@ -1,0 +1,87 @@
+<section *ngIf="pageData$">
+  <div class="gallery">
+    <div class="gallery__image"
+         (click)="openImage(image)"
+         *ngFor="let image of pageData$.pictures">
+      <img [src]="image.cropped_picture" [alt]="image.id">
+    </div>
+  </div>
+
+  <div class="pagination">
+
+    <button mat-mini-fab color="primary"
+            aria-label="Prev"
+            [disabled]="pageData$.page === 1"
+            (click)="setPage(pageData$.page - 1)">
+      <mat-icon>keyboard_arrow_left</mat-icon>
+    </button>
+
+    <button mat-mini-fab color="primary"
+            aria-label="Next"
+            [disabled]="!pageData$.hasMore"
+            (click)="setPage(pageData$.page + 1)">
+      <mat-icon>keyboard_arrow_right</mat-icon>
+    </button>
+  </div>
+</section>
+
+<ng-template #imageModal>
+  <div class="modal">
+    <div class="modal__header">
+      <div class="modal__header__actions">
+        <button mat-mini-fab
+                (click)="resetZoom()"
+                [disabled]="zoom === 1"
+                color="accent">
+          <mat-icon>fullscreen</mat-icon>
+        </button>
+        <button mat-mini-fab
+                (click)="zoomIn()"
+                color="accent">
+          <mat-icon>zoom_in</mat-icon>
+        </button>
+        <button mat-mini-fab
+                (click)="zoomOut()"
+                [disabled]="zoom === .5"
+                color="accent">
+          <mat-icon>zoom_out</mat-icon>
+        </button>
+        <button mat-mini-fab
+                (click)="shareImg()"
+                color="accent">
+          <mat-icon>share</mat-icon>
+        </button>
+      </div>
+      <button mat-icon-button color="primary"
+              aria-label="Close"
+              (click)="dialogRef.close()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal__body">
+      <img [src]="selectedImage.full_picture"
+           [style.transform]="'scale(' + zoom + ')'">
+
+      <div class="modal__body__info">
+        <p>{{ selectedImage.author }}</p>
+        <p>{{ selectedImage.camera }}</p>
+        <p>{{ selectedImage.tags }}</p>
+      </div>
+
+      <button mat-mini-fab color="primary"
+              class="modal__body__prev"
+              (click)="prevPic()"
+              [disabled]="picPos === 0"
+              aria-label="Prev">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+      </button>
+      <button mat-mini-fab color="primary"
+              class="modal__body__next"
+              (click)="nextPic()"
+              [disabled]="picPos === pageData$.pictures.length - 1"
+              aria-label="Next">
+        <mat-icon>keyboard_arrow_right</mat-icon>
+      </button>
+    </div>
+  </div>
+</ng-template>
