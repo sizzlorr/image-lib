@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { ImagesService } from '../services/images.service';
+import { AuthService } from '../services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 
@@ -35,10 +36,10 @@ export class GridComponent implements OnInit, OnDestroy {
   zoom = 1;
   picPos: number;
 
-  constructor(private imagesService: ImagesService, public dialog: MatDialog) { }
+  constructor(private imagesService: ImagesService, public dialog: MatDialog, private authService: AuthService) { }
 
   ngOnInit() {
-    this.subscriptions$.add(this.imagesService.viewUserIsLogged.subscribe(status => {
+    this.subscriptions$.add(this.authService.viewUserIsLogged.subscribe(status => {
       if (status) {
         this.imagesService.getImages();
         this.getPageData();
@@ -54,7 +55,8 @@ export class GridComponent implements OnInit, OnDestroy {
     this.picPos = this.pageData$.pictures.findIndex(p => p.id === selectedImage.id);
     this.selectedImage = selectedImage;
     this.dialogRef = this.dialog.open(this.imageModal, {
-      maxHeight: '90vh'
+      maxHeight: '90vh',
+      width: '70%'
     });
 
     this.dialogRef.afterClosed().subscribe(result => {
