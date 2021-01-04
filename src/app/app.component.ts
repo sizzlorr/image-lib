@@ -1,16 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { ImagesService } from './services/images.service';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
 
-  constructor(private imagesService: ImagesService) { }
-
-  ngOnInit() {
-    this.imagesService.auth();
-  }
+  constructor() { }
 }
